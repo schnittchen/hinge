@@ -26,8 +26,12 @@ module Hinge
     private
 
     def populate_node(node, history = [])
-      raise UnknownDependency unless node.method # TODO nice message
-      raise CircularReference if history.include?(node.name)
+      unless node.method
+        complain(UnknownDependency, node, history, "method #{node.method_name} not found")
+      end
+      if history.include?(node.name)
+        complain(CircularReference, node, history, "dependency #{node.name} depends on itself")
+      end
 
       node.dependency_names.each do |dep_name|
         populate_node node(dep_name), history + [node.name]
@@ -38,6 +42,10 @@ module Hinge
           @resolved[dep_name]
         end
       @resolved[node.name] = node.invoke(ordered_dependent_values)
+    end
+
+    def complain(exn, node, history, msg = "")
+      raise exn, "#{msg} (resolving #{[*history, node.name].join(" -> ")})"
     end
 
     def node(name)
