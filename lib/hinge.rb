@@ -1,5 +1,8 @@
 require "hinge/version"
+require 'hinge/resolver'
 
 module Hinge
-  # Your code goes here...
+  def self.resolver(container)
+    Resolver.new(container)
+  end
 end
