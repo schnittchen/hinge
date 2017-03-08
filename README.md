@@ -1,8 +1,39 @@
 # Hinge
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/hinge`. To experiment with that code, run `bin/console` for an interactive prompt.
+Hinge is a trivial dependency resolver. With Hinge, you can write down object dependencies
+in a linear fashion to have a simple overview of them.
 
-TODO: Delete this and the text above, and describe your gem
+```
+class Deps
+  # This method implements building a logger. It has no dependencies.
+  def build_logger
+    Logger.new($stdout)
+  end
+
+  # This method builds an instance of the `Processor` class you want to use,
+  # initialized with the logger from the previous method.
+  # This matching is done by the name of the parameter!
+  def build_processor(logger)
+    Processor.new(logger)
+  end
+
+  # Named parameters can be used as well!
+  def build_runner(logger:)
+    Runner.new(logger)
+  end
+end
+
+deps = Deps.new
+resolver = Hinge.resolver(deps)
+processor = resolver.resolve(:processor)
+resolver.resolve(:processor).equal?(processor) # => true (the same object is returned as last time)
+```
+
+And that's all!
+
+Varying dependencies depending on the environment can now easily be handled in a number of ways,
+ranging from `if/else` or `case` constructs to inheritance or overriding methods of `Deps`.
+
 
 ## Installation
 
@@ -20,17 +51,10 @@ Or install it yourself as:
 
     $ gem install hinge
 
-## Usage
-
-TODO: Write usage instructions here
-
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Tests are written in RSpec.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/hinge.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/schnittchen/hinge.
