@@ -6,6 +6,7 @@ require 'hinge/version'
 Gem::Specification.new do |spec|
   spec.name          = "hinge"
   spec.version       = Hinge::VERSION
+  spec.licenses      = ['MIT']
   spec.authors       = ["Thomas Stratmann"]
   spec.email         = ["thomas.stratmann@9elements.com"]
 
