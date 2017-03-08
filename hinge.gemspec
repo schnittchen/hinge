@@ -11,6 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Trivial dependency resolver using introspection}
   spec.description   = %q{Trivial dependency resolver using introspection}
+  spec.homepage      = %q{https://github.com/schnittchen/hinge}
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
