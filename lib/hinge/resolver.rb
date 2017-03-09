@@ -34,7 +34,7 @@ module Hinge
       end
 
       node.dependency_names.each do |dep_name|
-        populate_node node(dep_name), history + [node.name]
+        populate_node node(dep_name), history + [node.name] unless @resolved[dep_name]
       end
 
       ordered_dependent_values =

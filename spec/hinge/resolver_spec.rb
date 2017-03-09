@@ -78,6 +78,31 @@ describe Hinge::Resolver do
       end
     end
 
+    describe "with two distinct paths from root to the same dependency" do
+      let(:container) do
+        container = Object.new
+        def container.build_root(dep1, dep2)
+          Struct.new(:dep1, :dep2).new(dep1, dep2)
+        end
+        def container.build_dep1(leaf)
+          Struct.new(:leaf).new(leaf)
+        end
+        def container.build_dep2(leaf)
+          Struct.new(:leaf).new(leaf)
+        end
+        def container.build_leaf
+          "leaf"
+        end
+        container
+      end
+
+      it "resolves correctly" do
+        root = subject.resolve(:root)
+
+        expect(root.dep1.leaf).to equal(root.dep2.leaf)
+      end
+    end
+
     describe "with a missing dependency" do
       let(:container) do
         container = Object.new
